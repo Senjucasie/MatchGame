@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class CardData 
 {
-    private int CardType;
+    public int CardType;
     public Sprite Answer;
     public CardState State;
 

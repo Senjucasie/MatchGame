@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,23 +13,20 @@ namespace Core
         private Button _button;
         [SerializeField]private CardData _data;
         [SerializeField] private Sprite _hide;
-    
-        private float _rotatedAngle;
         [SerializeField] private float _speed;
-
-        private bool swapped;
        
         private void Awake()
         {
             _button = GetComponent<Button>();
             _image = GetComponent<Image>();
-            swapped = false;
             _button.enabled = false;
         }
 
+        
         private void Start()
         {
             _button.onClick.AddListener(OnClicked);
+            
         }
 
         public void SetCardData(CardData data)
@@ -45,7 +43,10 @@ namespace Core
             }
         }
 
-       
+       public int GetCardType()
+        {
+            return _data.CardType;  
+        }
 
 
         public void OnClicked()
@@ -57,58 +58,47 @@ namespace Core
             else
             {
                 _data.State = CardState.Clicked;
-                StartCoroutine(ShowCard());
+                ShowCard();
             }
 
         }
         
-        private IEnumerator ShowCard()
+        
+
+        public void ShowCard()
         {
-            while (_rotatedAngle < 180)
-            {
-                _rotatedAngle += _speed * Time.deltaTime;
-                transform.Rotate(0, _speed * Time.deltaTime, 0);
-
-                if (_rotatedAngle >= 90 && !swapped)
-                {
-                    swapped = true;
-                    swapImage(_data.Answer);
-                }
-                yield return null;
-            }
-            _rotatedAngle = 0;
-            swapped = false;
-
-            
+      
+            swapImage(_data.Answer);
+            Invoke("delayToShow",0.5f);
 
         }
 
-        private IEnumerator HideCard()
+        private void delayToShow()
         {
-
-            while (_rotatedAngle < 180)
-            {
-                _rotatedAngle += _speed * Time.deltaTime;
-                transform.Rotate(0, -_speed * Time.deltaTime, 0);
-                if (_rotatedAngle >= 90 && !swapped)
-                {
-                    swapped = true;
-                    swapImage(_hide);
-                }
-                yield return null;
-            }
-            swapped = false;
+            EventManager.InvokeCardVisibleEvent(this);
+        }
+        
+        public void HideCard()
+        {
+         
+            swapImage(_hide);
+      
             _data.State = CardState.Normal;
-            _rotatedAngle = 0;
 
         }
 
+        public void Won()
+        {
+            _image.enabled = false;
+            _data.State = CardState.Won;
+        }
 
         private void swapImage(Sprite sprite)
         {
             _image.sprite = sprite;
         }
 
+        
     }
     public enum CardState
     {
