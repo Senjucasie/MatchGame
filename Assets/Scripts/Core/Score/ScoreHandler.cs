@@ -17,8 +17,8 @@ public class ScoreHandler : MonoBehaviour
     {
         if (id1 == id2)
         {
-            CurrentScore++;
-            UpdateUI();
+          
+            UpdateUI(++CurrentScore);
             return true;
         }
         else
@@ -27,8 +27,8 @@ public class ScoreHandler : MonoBehaviour
         }
     }
 
-    private void UpdateUI()
+    public void UpdateUI(int score)
     {
-        _scoreView.UpdateScore(CurrentScore);
+        _scoreView.UpdateScore(score);
     }
 }

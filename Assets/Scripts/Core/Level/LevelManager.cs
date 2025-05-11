@@ -1,17 +1,20 @@
 using Core;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
     [SerializeField]private List<Sprite> _cardSprites;
     [SerializeField] private CardFactory _cardFactory;
+    public LevelData CurrentLevel;
 
-  
-    public List<CardData> CreateLevel(LevelData level)
+
+
+    public List<CardData> CreateLevel()
     {
-        int cardstospawn = level.NumberOfCells/2;
+        int cardstospawn = CurrentLevel.NumberOfCells/2;
         int spawncounter = 2;
         int index = 0;
         List<CardData> carddatas = new List<CardData>();
@@ -30,8 +33,19 @@ public class LevelManager : MonoBehaviour
 
     }
 
-   
+    public List<CardData> CreateLevel(List<PersistCard> persistcard)
+    {
+        List<CardData> carddatas = new List<CardData>();
+        for (int i = 0; i < persistcard.Count; i++)
+        {
+            CardData data = _cardFactory.CreateCardData(_cardSprites[persistcard[i].CardType], persistcard[i].CardType, persistcard[i].State);
+            carddatas.Add(data);
+        }
+        return carddatas;
+    }
 
 
 
-}
+
+
+    }

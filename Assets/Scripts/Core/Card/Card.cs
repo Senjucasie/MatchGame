@@ -13,7 +13,6 @@ namespace Core
         private Button _button;
         [SerializeField]private CardData _data;
         [SerializeField] private Sprite _hide;
-        [SerializeField] private float _speed;
        
         private void Awake()
         {
@@ -32,7 +31,13 @@ namespace Core
         public void SetCardData(CardData data)
         {
             _data = data;
+            if(data.State == CardState.Won)
+            {
+                _image.enabled = false;
+            }
+                
             _image.sprite = _data.Answer;
+
         }
         public void SetCard()
         {
@@ -47,7 +52,10 @@ namespace Core
         {
             return _data.CardType;  
         }
-
+        public CardState GetCardState()
+        {
+            return _data.State;
+        }
 
         public void OnClicked()
         {

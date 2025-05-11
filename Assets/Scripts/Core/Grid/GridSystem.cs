@@ -52,9 +52,27 @@ namespace Core.Grid
         {
             return height / column;
         }
+
+        public List<PersistCard> Save()
+        {
+            List<PersistCard>  cards= new List<PersistCard>();
+            foreach(Card card in Cards)
+            {
+                if(card.GetCardState() == CardState.Clicked)
+                {
+                    cards.Add(new PersistCard(card.GetCardType(), CardState.Normal));
+                }
+                else
+                {
+                    cards.Add(new PersistCard(card.GetCardType(), card.GetCardState()));
+                }
+                
+            }
+            return cards;
+        }
     }
 
-    
+   
 
     
 }
